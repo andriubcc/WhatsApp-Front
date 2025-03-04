@@ -36,6 +36,7 @@ function Chat() {
   const [ dropdown, setDropdown ] = useState(false);
   const [ newRoom, setNewRoom] = useState(false);
   const [ joined, setJoined ] = useState(false);
+  const [ chats, setChats ] = useState(false);
 
 const { name, setName, roomName, setRoomName, storedId, setStoredId} = useContext(UserContext);
   
@@ -91,8 +92,6 @@ useEffect(() => {
 }, [roomName]);
 
 
-
-
   const handleMessage = () => {
     if(message && roomName){
       io.emit("message", {message, name, roomName});
@@ -111,7 +110,6 @@ useEffect(() => {
   }
   
 
-
   return (
     <Container>
       <div className='back-ground'></div>
@@ -119,18 +117,29 @@ useEffect(() => {
 
         <div className='chat-contacts'>
           <div className='chat-options'></div>
-        {rooms.map((room, index) => (
-          <div className='chat-item' style={{border: "solid red 1px"}}>
-            <img src={image} className='image-profile' alt='' />
-                <div className='title-chat-container' >
-            <span  key={index} className='title-message'>{room}</span>
-                <span className='last-message'>
-                {messages.length? `${messages[messages.length - 1].name}: ${messages[messages.length - 1].message}` : ''}
-                </span>
-            </div>
-          </div>
+    {chats?
+    <>
+{rooms.map((room, index) => (
+  <div className='chat-item' style={{border: "solid red 1px"}}>
+    <img src={image} className='image-profile' alt='' />
+        <div className='title-chat-container' >
+    <span  key={index} className='title-message'>{room}</span>
+        <span className='last-message'>
+        {messages.length? `${messages[messages.length - 1].name}: ${messages[messages.length - 1].message}` : ''}
+        </span>
+    </div>
+  </div>
+))}
+</>
+:
+<>
+<div>Não contem nenhum chat</div>
 
-        ))}
+</>    
+    }
+
+
+
         </div>
 
         <div style={{backgroundImage: `url(${wallpaper})`}} className='chat-messages'>
