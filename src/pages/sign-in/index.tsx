@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { UserContext } from "contexts/usercontext";
 
-
+interface IProps {
+  email: string;
+}
 
 
 function SignIn() {
@@ -12,7 +14,9 @@ function SignIn() {
 
   const navigate = useNavigate();
 
-  const { handleLogin  } = useContext(UserContext) 
+  const { handleLogin  } = useContext(UserContext);
+
+  
     
 
     return (

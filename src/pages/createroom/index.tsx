@@ -23,24 +23,9 @@ function CreateRoom() {
     const { handleCreateRoom } = useContext(UserContext);
 
     useEffect(() => {
-      const getUser = async ({ storedEmail }: IProps) => {
-        try {
-          const response = await fetch('http://localhost:4000/api/chat/get-user', {
-            method: 'GET',
-            headers: {
-             'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({storedEmail})
-          })
-          const data = await response.json();
-          setEmail(storedEmail);
-
-
-        } catch (error) {
-          console.error("Erro ao receber dados do usuário", error)
-        }
-      }
-    })
+      setEmail(storedEmail);
+      console.log({storedEmail, email})
+    }, [email])
 
 
     return (

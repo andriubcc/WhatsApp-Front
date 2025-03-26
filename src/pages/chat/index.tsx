@@ -14,6 +14,17 @@ type IProps = {
     rooms: [];
     roomName: string;
     storedName: string
+    email: string;
+    storedEmail: string;
+}
+
+interface Room {
+  room_id: string;
+  roomName: string;
+}
+
+interface ApiResponse {
+  Rooms: Room[];
 }
 
 interface User {
@@ -32,13 +43,13 @@ function Chat() {
   const [ message, setMessage ] = useState('');
   const [ messages, setMessages ] = useState<{ name: string; message: string }[]>([]);
   const [ storedName, setStoredName ] = useState(() => localStorage.getItem("storedName") as string)
-  const [ rooms, setRooms ] = useState<[]>([]);
+  const [ rooms, setRooms ] = useState<Room[]>([]);
   const [ dropdown, setDropdown ] = useState(false);
   const [ newRoom, setNewRoom] = useState(false);
-  const [ joined, setJoined ] = useState(false);
+  const [ login, setLogin ] = useState(false);
   const [ chats, setChats ] = useState(false);
 
-const { name, setName, roomName, setRoomName, storedId, setStoredId} = useContext(UserContext);
+const { name, setName, roomName, setRoomName, storedId, setStoredId, email, setEmail, storedEmail, setStoredEmail} = useContext(UserContext);
   
   
 
@@ -51,6 +62,29 @@ const { name, setName, roomName, setRoomName, storedId, setStoredId} = useContex
   const handleDropDown = () => {
     setDropdown(true);
   }
+
+
+  const GetRooms = async ({storedEmail}: IProps) => {
+     const url = `http://localhost:4000/api/chat/get-user-room?email=${storedEmail}`;
+
+      try {
+        const response = await fetch(url, { method: 'GET'});
+
+        const data:ApiResponse = await response.json();
+
+        const roomsArray = data?.Rooms || []; 
+        console.log(data);
+        setRooms( roomsArray );
+        console.log(rooms)
+        setChats(true);
+      } catch(error) {
+        console.log("Erro ao buscar dados do usuário", error);
+    }
+  }  
+  
+  useEffect(() => {
+    GetRooms({storedEmail} as any);
+  }, [storedEmail]);
 
 
   useEffect(() => { 
@@ -120,10 +154,10 @@ useEffect(() => {
     {chats?
     <>
 {rooms.map((room, index) => (
-  <div className='chat-item' style={{border: "solid red 1px"}}>
+  <div className='chat-item'>
     <img src={image} className='image-profile' alt='' />
         <div className='title-chat-container' >
-    <span  key={index} className='title-message'>{room}</span>
+    <span  key={index} className='title-message'>{room.roomName}</span>
         <span className='last-message'>
         {messages.length? `${messages[messages.length - 1].name}: ${messages[messages.length - 1].message}` : ''}
         </span>
@@ -154,7 +188,7 @@ useEffect(() => {
                   ))}
                 </span>
               </div>
-              <button className='drop' onClick={() => {handlereload(); navigate('/createnewroom');}}>Criar Sala</button>
+              <button className='drop' onClick={() => {navigate('/createroom');}}>Criar Sala</button>
             </div>
           </div>
           

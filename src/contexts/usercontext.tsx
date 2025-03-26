@@ -20,6 +20,7 @@ export const UserContext = createContext({} as any);
 export const UserStorage = ({children}: any) => {
     const [ name, setName ] = useState('');
     const [ email, setEmail ] = useState('');
+    const [ storedEmail, setStoredEmail ] = useState(() => localStorage.getItem("email"));
     const [ userPhoneNumber, setUserPhoneNumber ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ login, setLogin] = useState(false);
@@ -97,6 +98,9 @@ export const UserStorage = ({children}: any) => {
               body: JSON.stringify({ email, password })
             })
             const data = await response.json();
+            localStorage.setItem("email", email);
+            setStoredEmail(storedEmail);
+            setEmail(email)
             console.log(data);
             setLogin(true);
             navigate('/chat');
@@ -107,14 +111,17 @@ export const UserStorage = ({children}: any) => {
           } 
         }
 
+      
 
+
+       
         
 
       
 
 
     return (
-        <UserContext.Provider value={{ handleCreateRoom, handleCreateUser, handleLogin, login, setLogin, name, setName,   roomName, setRoomName, storedName, setStoredName }}>
+        <UserContext.Provider value={{ handleCreateRoom, handleCreateUser, handleLogin, login, setLogin, name, setName,   roomName, setRoomName, storedName, setStoredName, setEmail, email, storedEmail, setStoredEmail }}>
             {children}
         </UserContext.Provider>
     )

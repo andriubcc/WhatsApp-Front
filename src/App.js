@@ -3,7 +3,6 @@ import { UserStorage } from 'contexts/usercontext';
 import { DataProvider } from 'contexts/datacontext';
 import Chat from 'pages/chat';
 import CreateRoom from './pages/createroom';
-import CreateNewRoom from 'pages/createnewroom';
 import SignIn from 'pages/sign-in';
 import SignUp from 'pages/sign-up';
 
@@ -15,11 +14,10 @@ function App() {
     <DataProvider>
     <div className='app' style={{width: "100%"}}>
       <Routes>
-        <Route path='/' element={<CreateRoom />}/>
-        <Route path='/signup' element={<SignUp />}/>
+        <Route path='/' element={<SignUp />}/>
         <Route path='/signin' element={<SignIn />}/>
         <Route path='/chat' element={<Chat />}/>
-        <Route path='/createnewroom' element={<CreateNewRoom />}/>
+        <Route path='/createroom' element={<CreateRoom />}/>
       </Routes>
     </div>
     </DataProvider>
